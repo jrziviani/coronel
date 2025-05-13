@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "rope": "cpp",
+        "slist": "cpp",
+        "dynamic_bitset": "cpp"
+    }
+}
