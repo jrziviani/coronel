@@ -17,6 +17,8 @@ public:
     void clear() override;
     void printc(char c) override;
     void prints(const char *s) override;
+    void printd(int d);
+    void printx(uint64_t x);
 };
 
 #endif // PROTECTED_MODE_H
