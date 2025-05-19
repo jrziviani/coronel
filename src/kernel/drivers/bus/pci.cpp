@@ -64,7 +64,6 @@ namespace bus {
     // and if a device is found, it is further scanned for functions or bridges.
     void pci::scan_bus(pci_function_t callback, int type, uint8_t bus)
     {
-        // scan each of the MAX_PCI_SLOTS slots in the bus
         for (uint8_t slot = 0; slot < MAX_PCI_SLOTS; slot++) {
             scan_slot(callback, type, bus, slot);
         }
@@ -99,26 +98,20 @@ namespace bus {
     void pci::scan_slot(pci_function_t cb, int type, uint8_t bus, uint8_t slot)
     {
         pci_address_t addr(bus, slot, 0);
-
-        // Check if the slot is empty (no device connected).
         if (read_word(addr, PCI_VENDOR_ID) == PCI_NONE) {
             return;
         }
 
-        // Scan the main function of the device.
         scan_function(cb, type, bus, slot, 0);
 
-        // Check if the device is a multifunction device.
-        if ((read_byte(addr, PCI_HEADER_TYPE) & 0x80) == 0) {
-            return;
-        }
-
-        // Scan additional functions of the multifunction device.
-        for (uint8_t function = 1; function < MAX_PCI_FUNCTIONS; function++) {
-            if (read_word(pci_address_t(bus, slot, function), PCI_VENDOR_ID) != PCI_NONE) {
-                scan_function(cb, type, bus, slot, function);
+        // Check if the device is a multifunction device and scan all its functions.
+        if ((read_byte(addr, PCI_HEADER_TYPE) & 0x80) != 0) {
+            for (uint8_t function = 1; function < MAX_PCI_FUNCTIONS; function++) {
+               if (read_word(pci_address_t(bus, slot, function), PCI_VENDOR_ID) != PCI_NONE) {
+                    scan_function(cb, type, bus, slot, function);
+                }
             }
-        }
+        }        
     }
 
     // This function scans a specific function of a PCI device. If the function matches
@@ -127,8 +120,6 @@ namespace bus {
     void pci::scan_function(pci_function_t cb, int type, uint8_t bus, uint8_t slot, uint8_t function)
     {
         pci_address_t addr(bus, slot, function);
-
-        // Check if the device matches the specified type or if no type is specified.
         if (type == -1 || type == get_type(addr)) {
             pci_info_t info {
                 addr,

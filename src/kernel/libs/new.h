@@ -23,6 +23,24 @@ void operator delete[](void*, void*) noexcept;
 void operator delete(void*, unsigned long) noexcept;
 void operator delete[](void*, unsigned long) noexcept;
 
+namespace lib
+{
+    struct basic_allocator
+    {
+        template <typename T, typename... Args>
+        T *create(Args&&... args)
+        {
+            return new T(forward<Args>(args)...);
+        }
+
+        template <typename T>
+        void destroy(T *tp)
+        {
+            delete tp;
+        }
+    };
+}
+
 /*
 namespace klib
 {
@@ -43,21 +61,6 @@ namespace klib
             }
 
             kfree_block(sizeof(T));
-        }
-    };
-
-    struct basic_allocator
-    {
-        template <typename T, typename... Args>
-        T *create(Args&&... args)
-        {
-            return new T(forward<Args>(args)...);
-        }
-
-        template <typename T>
-        void destroy(T *tp)
-        {
-            delete tp;
         }
     };
 }

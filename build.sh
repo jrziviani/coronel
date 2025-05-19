@@ -129,12 +129,12 @@ config_cross_compiler() {
 main() {
     # print_header "Installing dependencies"
     
-    # install_package cmake
-    # install_package g++
-    # install_package libmpc-dev
-    # install_package xorriso
-    # install_package grub-pc-bin
-    # install_package qemu-system-x86
+    install_package cmake
+    install_package g++
+    install_package libmpc-dev
+    install_package xorriso
+    install_package grub-pc-bin
+    install_package qemu-system-x86
 
     config_cross_compiler
 
