@@ -2,8 +2,7 @@
 #include "config.h"
 
 #include <stdarg.h>
-// #include <libs/stdlib.h>
-// #include <klib/string.h>
+#include <libs/stdlib.h>
 
 protected_mode::protected_mode() : iprotected_mode()
 {
@@ -70,4 +69,18 @@ void protected_mode::prints(const char *s)
         printc(*s);
         s++;
     }
+}
+
+void protected_mode::printd(int d)
+{
+    char buffer[32];
+    itoa(buffer, 32, d, base::dec);
+    prints(buffer);
+}
+
+void protected_mode::printx(uint64_t x)
+{
+    char buffer[32];
+    itoa(buffer, 32, x, base::hex);
+    prints(buffer);
 }

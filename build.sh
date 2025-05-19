@@ -2,6 +2,8 @@
 
 set -e
 
+readonly INSTALL_PKG='sudo apt install -y '
+
 readonly BINUTILS_VERSION='2.44'
 readonly GCC_VERSION='15.1.0'
 readonly BUILD_PATH="build"
@@ -28,6 +30,15 @@ assert_target() {
        die "Unexpected target $target" 2
 }
 
+install_package() {
+    local pkgname="$1"
+
+    $INSTALL_PKG "$pkgname" || {
+        printf "Failed to install %s\n" "$pkgname"
+        die "Please install it manually" 1
+    }
+}
+
 config_cross_compiler() {
     print_header "Setup the cross compiler"
 
@@ -35,7 +46,7 @@ config_cross_compiler() {
 
     if [[ -d $BUILD_PATH/compiler/bin && -f $BUILD_PATH/compiler/.done ]]
     then
-        export PATH=$PATH:$BUILD_PATH/compiler/bin
+        export PATH=$PATH:$PWD/$BUILD_PATH/compiler/bin
         print_message "Compiler looks fine, return"
         return
     fi
@@ -115,13 +126,27 @@ config_cross_compiler() {
     export PATH=$PATH:$PWD/$BUILD_PATH/compiler/bin
 }
 
+main() {
+    # print_header "Installing dependencies"
+    
+    # install_package cmake
+    # install_package g++
+    # install_package libmpc-dev
+    # install_package xorriso
+    # install_package grub-pc-bin
+    # install_package qemu-system-x86
 
+    config_cross_compiler
 
-config_cross_compiler
+    print_header "Building"
 
-pushd $BUILD_PATH
-cmake -H.. -Bdebug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-cmake --build debug
-popd
+    pushd $BUILD_PATH
+    cmake -H.. -Bdebug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    #cmake --build debug
+    cmake --build debug --target qemu
+    popd
 
-ln -fs $BUILD_PATH/debug/compile_commands.json .
+    ln -fs $BUILD_PATH/debug/compile_commands.json .
+}
+
+main "$@"
