@@ -1,0 +1,1 @@
+add_library(memory.o OBJECT allocators.cpp)

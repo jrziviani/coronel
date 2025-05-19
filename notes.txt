@@ -1,0 +1,3 @@
+dependencies:
+    apt-get install libmpc-dev
+

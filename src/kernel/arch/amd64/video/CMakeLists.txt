@@ -1,0 +1,1 @@
+add_library(amd64_protected_mode.o STATIC protected_mode.cpp)
