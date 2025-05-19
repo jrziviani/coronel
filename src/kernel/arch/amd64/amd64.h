@@ -3,15 +3,18 @@
 
 #include <arch/iarch.h>
 #include "instructions.h"
+#include "memory/paging.h"
+#include "memory/pagetable.h"
 #include "video/protected_mode.h"
 
 class amd64 : public iarch
 {
 private:
     protected_mode video_;
+    paging paging_;
 
 public:
-    amd64() = default;
+    amd64();
 
     void cpu_halt() override;
 

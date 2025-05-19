@@ -1,21 +1,25 @@
 #include "new.h"
 
-void *operator new(size_t size)
+void *operator new(size_t size) throw()
 {
+    (void)size;
     return nullptr;
 }
 
-void *operator new[](size_t size)
+void *operator new[](size_t size) throw()
 {
+    (void)size;
     return nullptr;
 }
 
 void operator delete(void *p)
 {
+    (void)p;
 }
 
 void operator delete[](void *p)
 {
+    (void)p;
 }
 
 void operator delete(void*, void*) noexcept

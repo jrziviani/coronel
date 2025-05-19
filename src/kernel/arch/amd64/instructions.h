@@ -17,6 +17,11 @@ namespace insn
     uint8_t inb(uint16_t port);
     uint16_t inw(uint16_t port);
     uint32_t inl(uint16_t port);
+
+    paddr_t get_current_page();
+    void tlb_flush(paddr_t addr);
+
+    void lidt(uint64_t idt);
 }
 
 #endif // INSTRUCTIONS_H

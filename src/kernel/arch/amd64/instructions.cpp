@@ -70,3 +70,27 @@ uint32_t insn::inl(uint16_t port)
 
     return ret;
 }
+
+paddr_t insn::get_current_page()
+{
+    uintptr_t cr3;
+    asm volatile("mov %%cr3, %0"
+                 : "=r"(cr3));
+
+    return ptr_to<paddr_t>(cr3);
+}
+
+void insn::tlb_flush(paddr_t addr)
+{
+    asm volatile("invlpg (%0)"
+                 :
+                 : "r"(ptr_from(addr))
+                 : "memory");
+}
+
+void insn::lidt(uint64_t idt)
+{
+    asm volatile("lidt (%0)"
+                 :
+                 : "r"(idt));
+}

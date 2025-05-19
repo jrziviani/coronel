@@ -59,6 +59,7 @@ class iarch
 {
 public:
     virtual void cpu_halt() = 0;
+
     virtual iprotected_mode *get_video() = 0;
 
     virtual uint8_t read_byte(uint32_t addr, uint16_t addr_port, uint16_t value_port) const = 0;
