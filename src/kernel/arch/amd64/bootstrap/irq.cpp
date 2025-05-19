@@ -3,22 +3,7 @@
 #include <arch/amd64/instructions.h>
 #include <arch/amd64/video/protected_mode.h>
 
-void timer_handler(const interrupt_t &interrupt)
-{
-}
-
-void keyboard_handler(const interrupt_t &interrupt)
-{
-    auto status = insn::inb(0x64);
-    if ((status & 0x01) == 0) {
-        return;
-    }
-
-    auto data = insn::inb(0x60);
-
-    protected_mode video;
-    video.printc(data);
-}
+const keyboard_handler_t *keyboard_handler_p = nullptr;
 
 void interrupt_handler(const interrupt_t &interrupt)
 {
@@ -30,10 +15,11 @@ void interrupt_handler(const interrupt_t &interrupt)
 
     switch (interrupt.int_no) {
         case 0x0: // Timer interrupt
-            timer_handler(interrupt);
             break;
         case 0x1: // Keyboard interrupt
-            keyboard_handler(interrupt);
+            if (keyboard_handler_p != nullptr) {
+                (*keyboard_handler_p)(interrupt);
+            }
             break;
         case 0x3: // Serial port 1 (COM2)
             break;

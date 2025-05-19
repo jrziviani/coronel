@@ -1,7 +1,7 @@
 #include "keyboard.h"
-
-#include <arch/amd64/instructions.h>
-#include <libs/stdint.h>
+#include "arch/iarch.h"
+#include "arch/amd64/instructions.h"
+#include "libs/stdint.h"
 
 constexpr uint16_t DATA_IN_BUFFER = 0x01;
 constexpr uint16_t STATUS_PORT = 0x64;
@@ -120,8 +120,11 @@ constexpr char NUM    = 0x10;
 constexpr char SCROLL = 0x20;
 constexpr char ESC    = 0x40;
 
+peripherals::keyboard::keyboard(iarch *arch) : arch_(arch), shift_(false)
+{
+}
 
-void keyboard::on_keyboard()
+void peripherals::keyboard::on_keyboard(const interrupt_t &)
 {
     auto status = insn::inb(STATUS_PORT);
     if ((status & DATA_IN_BUFFER) == 0) {
@@ -138,7 +141,7 @@ void keyboard::on_keyboard()
     }
 }
 
-void keyboard::on_keyup(unsigned char c)
+void peripherals::keyboard::on_keyup(unsigned char c)
 {
     switch (c) {
         case 0xaa: // left shift release
@@ -148,12 +151,12 @@ void keyboard::on_keyup(unsigned char c)
     }
 }
 
-void keyboard::on_keydown(unsigned char c)
+void peripherals::keyboard::on_keydown(unsigned char c)
 {
     switch (c) {
         case 0x2a: // left shift
         case 0x36: // right shift
-            shift_ = true;;
+            shift_ = true;
             return;
     }
 
@@ -163,4 +166,14 @@ void keyboard::on_keydown(unsigned char c)
     else {
         arch_->get_video()->printc(en_US[c]);
     }
+}
+
+peripherals::keyboard &peripherals::add_keyboard(iarch *arch)
+{
+    static peripherals::keyboard instance(arch);
+    static keyboard_handler_t handler(instance, &peripherals::keyboard::on_keyboard);
+
+    arch->set_keyboard_handler(&handler);
+
+    return instance;
 }

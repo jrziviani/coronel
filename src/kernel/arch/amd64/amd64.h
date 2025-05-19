@@ -1,8 +1,10 @@
 #ifndef AMD64_H
 #define AMD64_H
 
-#include <arch/iarch.h>
+#include "arch/iarch.h"
+#include "bootstrap/irq.h"
 #include "instructions.h"
+#include "libs/move.h"
 #include "memory/paging.h"
 #include "memory/pagetable.h"
 #include "video/protected_mode.h"
@@ -21,6 +23,11 @@ public:
     iprotected_mode *get_video() override
     {
         return &video_;
+    }
+
+    void set_keyboard_handler(const keyboard_handler_t *handler) override
+    {
+        keyboard_handler_p = handler;
     }
 
     uint8_t read_byte(uint32_t addr, uint16_t addr_port, uint16_t value_port) const override

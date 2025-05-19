@@ -3,6 +3,7 @@
 
 #include "archs.h"
 #include "config.h"
+#include "drivers/peripherals/keyboard.h"
 
 void kmain(multiboot_info_t *bootinfo, unsigned long magic)
 {
@@ -78,6 +79,8 @@ void kmain(multiboot_info_t *bootinfo, unsigned long magic)
     video->prints("Scanning PCI devices...\n");
     auto &pci = bus::get_pci(arch);
     pci.scan_hardware();
+
+    peripherals::add_keyboard(arch);
 
     /*
     while (true) {
