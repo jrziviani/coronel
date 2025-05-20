@@ -1,4 +1,4 @@
-#include "instructions.h"
+#include "instructions.hpp"
 
 void insn::sti() {
     __asm__ __volatile__("sti");

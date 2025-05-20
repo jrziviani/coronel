@@ -1,7 +1,7 @@
-#ifndef PHYSICAL_H
-#define PHYSICAL_H
+#ifndef PHYSICAL_HPP
+#define PHYSICAL_HPP
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 /*
  * physical memory
@@ -63,4 +63,4 @@ public:
     physical &operator=(physical&&)      = delete;
 };
 
-#endif // PHYSICAL_H
+#endif // PHYSICAL_HPP

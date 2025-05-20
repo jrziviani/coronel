@@ -1,7 +1,7 @@
-#ifndef PAGETABLE_H
-#define PAGETABLE_H
+#ifndef PAGETABLE_HPP
+#define PAGETABLE_HPP
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 void map_kernel_memory();
 
@@ -63,4 +63,4 @@ struct pml4_t {
     uintptr_t dirs[512];
 };
 
-#endif // PAGETABLE_H
+#endif // PAGETABLE_HPP

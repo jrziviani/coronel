@@ -1,7 +1,7 @@
-#ifndef STRING_H
-#define STRING_H
+#ifndef STRING_HPP
+#define STRING_HPP
 
-#include "stdint.h"
+#include "stdint.hpp"
 
 namespace lib
 {
@@ -66,4 +66,4 @@ namespace lib
     }
 }
 
-#endif // STRING_H
+#endif // STRING_HPP

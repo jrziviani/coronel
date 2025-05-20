@@ -1,7 +1,7 @@
-#ifndef INSTRUCTIONS_H
-#define INSTRUCTIONS_H
+#ifndef INSTRUCTIONS_HPP
+#define INSTRUCTIONS_HPP
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 namespace insn
 {
@@ -24,4 +24,4 @@ namespace insn
     void lidt(uint64_t idt);
 }
 
-#endif // INSTRUCTIONS_H
+#endif // INSTRUCTIONS_HPP

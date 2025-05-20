@@ -1,9 +1,9 @@
-#ifndef IARCH_H
-#define IARCH_H
+#ifndef IARCH_HPP
+#define IARCH_HPP
 
-#include "libs/stdint.h"
-#include "drivers/peripherals/keyboard.h"
-#include "iprotected_mode.h"
+#include "libs/stdint.hpp"
+#include "drivers/peripherals/keyboard.hpp"
+#include "iprotected_mode.hpp"
 
 class iarch
 {
@@ -22,4 +22,4 @@ public:
     virtual void write_dword(uint32_t addr, uint16_t addr_port, uint16_t value_port, uint32_t value) const = 0;
 };
 
-#endif // IARCH_H
+#endif // IARCH_HPP

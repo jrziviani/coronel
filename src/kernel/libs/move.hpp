@@ -1,7 +1,7 @@
-#ifndef MOVE_H
-#define MOVE_H
+#ifndef MOVE_HPP
+#define MOVE_HPP
 
-#include "type_traits.h"
+#include "type_traits.hpp"
 
 namespace lib
 {
@@ -27,4 +27,4 @@ namespace lib
     }
 }
 
-#endif // MOVE_H
+#endif // MOVE_HPP

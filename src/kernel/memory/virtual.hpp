@@ -1,9 +1,9 @@
-#ifndef VIRTUAL_H
-#define VIRTUAL_H
+#ifndef VIRTUAL_HPP
+#define VIRTUAL_HPP
 
-#include <libs/stdint.h>
-#include <libs/ilist.h>
-#include <libs/new.h>
+#include "libs/stdint.hpp"
+#include "libs/ilist.hpp"
+#include "libs/new.hpp"
 
 /*
  * virtual memory
@@ -51,4 +51,4 @@ public:
     void free(vaddr_t addr, size_t size);
 };
 
-#endif // VIRTUAL_H
+#endif // VIRTUAL_HPP

@@ -1,6 +1,6 @@
-#include "amd64.h"
-#include "instructions.h"
-#include "bootstrap/segments.h"
+#include "amd64.hpp"
+#include "instructions.hpp"
+#include "bootstrap/segments.hpp"
 
 amd64::amd64()
 {

@@ -1,7 +1,7 @@
-#include "keyboard.h"
-#include "arch/iarch.h"
-#include "arch/amd64/instructions.h"
-#include "libs/stdint.h"
+#include "keyboard.hpp"
+#include "arch/iarch.hpp"
+#include "arch/amd64/instructions.hpp"
+#include "libs/stdint.hpp"
 
 constexpr uint16_t DATA_IN_BUFFER = 0x01;
 constexpr uint16_t STATUS_PORT = 0x64;

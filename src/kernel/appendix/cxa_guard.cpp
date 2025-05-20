@@ -3,7 +3,7 @@
 // are part of the Itanium C++ ABI and are called by the compiler to ensure that 
 // static local variables are initialized only once, even in multithreaded environments.
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 namespace __cxxabiv1
 {

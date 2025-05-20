@@ -1,7 +1,7 @@
 #ifndef NEW_H
 #define NEW_H
 
-#include "stdint.h"
+#include "stdint.hpp"
 
 inline void *operator new(size_t, void *p) noexcept
 {

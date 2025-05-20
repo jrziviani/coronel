@@ -1,8 +1,6 @@
-#include "protected_mode.h"
-#include "config.h"
-
-#include <stdarg.h>
-#include <libs/stdlib.h>
+#include "protected_mode.hpp"
+#include "config.hpp"
+#include "libs/stdlib.hpp"
 
 protected_mode::protected_mode() : iprotected_mode()
 {

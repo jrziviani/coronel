@@ -1,9 +1,9 @@
-#include <libs/multiboot.h>
-#include <drivers/bus/pci.h>
+#include "libs/multiboot.hpp"
+#include "drivers/bus/pci.hpp"
 
-#include "archs.h"
-#include "config.h"
-#include "drivers/peripherals/keyboard.h"
+#include "archs.hpp"
+#include "config.hpp"
+#include "drivers/peripherals/keyboard.hpp"
 
 void kmain(multiboot_info_t *bootinfo, unsigned long magic)
 {

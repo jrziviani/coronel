@@ -1,4 +1,4 @@
-#include "new.h"
+#include "new.hpp"
 
 void *operator new(size_t size) throw()
 {

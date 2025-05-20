@@ -1,5 +1,5 @@
-#ifndef ICXXABI_H
-#define ICXXABI_H
+#ifndef ICXXABI_HPP
+#define ICXXABI_HPP
 
 // CODE FROM: https://wiki.osdev.org/C%2B%2B
 
@@ -57,4 +57,4 @@ void __cxa_finalize(void *f);
 };
 #endif // __cplusplus
 
-#endif // ICXXABI_H
+#endif // ICXXABI_HPP

@@ -1,7 +1,7 @@
-#ifndef PAGING_H
-#define PAGING_H
+#ifndef PAGING_HPP
+#define PAGING_HPP
 
-#include "pagetable.h"
+#include "pagetable.hpp"
 
 class paging
 {
@@ -27,4 +27,4 @@ class paging
     paddr_t create_top_page_directory();
 }; 
 
-#endif // PAGING_H
+#endif // PAGING_HPP

@@ -1,8 +1,8 @@
-#ifndef FUNCTIONAL_H
-#define FUNCTIONAL_H
+#ifndef FUNCTIONAL_HPP
+#define FUNCTIONAL_HPP
 
-#include "type_traits.h"
-#include "arch/amd64/registers.h"
+#include "type_traits.hpp"
+#include "arch/amd64/registers.hpp"
 
 namespace lib
 {
@@ -23,4 +23,4 @@ namespace lib
     };
 }
 
-#endif // FUNCTIONAL_H
+#endif // FUNCTIONAL_HPP

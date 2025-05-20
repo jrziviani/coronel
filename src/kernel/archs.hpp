@@ -1,6 +1,9 @@
-#include <arch/amd64/amd64.h>
-#include <memory/allocators.h>
-#include <libs/new.h>
+#ifndef ARCHS_HPP
+#define ARCHS_HPP
+
+#include "arch/amd64/amd64.hpp"
+#include "memory/allocators.hpp"
+#include "libs/new.hpp"
 
 namespace archs
 {
@@ -29,3 +32,5 @@ namespace archs
         #endif
     }
 }
+
+#endif // ARCHS_HPP

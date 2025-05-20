@@ -1,11 +1,11 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 
 #define KPHYSICAL_ADDRESS    0x400000
 #define KVIRTUAL_ADDRESS     0xffffffff80000000ULL
 
 #ifndef __ASSEMBLER__
-    #include <libs/stdint.h>
+    #include "libs/stdint.hpp"
 
     constexpr uintptr_t PCI_VIRTUAL_ADDRESS = KVIRTUAL_ADDRESS + 0x40000000;
 
@@ -54,4 +54,4 @@
     #define _EFER_LME            8
 #endif // __ASSEMBLY__
 
-#endif // CONFIG_H
+#endif // CONFIG_HPP

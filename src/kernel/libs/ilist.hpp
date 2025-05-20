@@ -1,8 +1,8 @@
-#ifndef ILIST_H
-#define ILIST_H
+#ifndef ILIST_HPP
+#define ILIST_HPP
 
-#include <memory/allocators.h>
-#include "stdint.h"
+#include "memory/allocators.hpp"
+#include "stdint.hpp"
 
 namespace lib
 {
@@ -132,4 +132,4 @@ namespace lib
     };
 }
 
-#endif // ILIST_H
+#endif // ILIST_HPP

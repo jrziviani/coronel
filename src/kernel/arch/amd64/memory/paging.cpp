@@ -1,10 +1,10 @@
-#include "paging.h"
+#include "paging.hpp"
 
-#include <config.h>
-#include <libs/logger.h>
-#include <libs/string.h>
-#include <memory/allocators.h>
-#include <arch/amd64/instructions.h>
+#include "config.hpp"
+#include "libs/logger.hpp"
+#include "libs/string.hpp"
+#include "memory/allocators.hpp"
+#include "arch/amd64/instructions.hpp"
 
 #define PTE(addr)       ((ptr_from(addr) >> 12) & 0x1ff)
 #define PDE(addr)       ((ptr_from(addr) >> 21) & 0x1ff)

@@ -1,8 +1,7 @@
-#include "physical.h"
-#include "allocators.h"
-
-#include <config.h>
-#include <libs/logger.h>
+#include "physical.hpp"
+#include "allocators.hpp"
+#include "config.hpp"
+#include "libs/logger.hpp"
 
 extern uint64_t _end;
 

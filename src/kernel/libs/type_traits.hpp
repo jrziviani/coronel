@@ -1,7 +1,7 @@
-#ifndef TYPE_TRAITS_H
-#define TYPE_TRAITS_H
+#ifndef TYPE_TRAITS_HPP
+#define TYPE_TRAITS_HPP
 
-#include "stdint.h"
+#include "stdint.hpp"
 
 namespace lib
 {
@@ -134,4 +134,4 @@ namespace lib
     {                                                                                                    \
     };
 
-#endif // TYPE_TRAITS_H
+#endif // TYPE_TRAITS_HPP

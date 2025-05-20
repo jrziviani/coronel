@@ -1,5 +1,5 @@
-#include "virtual.h"
-#include "allocators.h"
+#include "allocators.hpp"
+#include "virtual.hpp"
 
 const vaddr_t VADDR_START   = reinterpret_cast<vaddr_t>(0);
 const size_t VADDR_SIZE     = 256_GB;

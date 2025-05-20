@@ -1,9 +1,9 @@
-#include "pagetable.h"
-#include "../instructions.h"
+#include "pagetable.hpp"
+#include "../instructions.hpp"
 
-#include <config.h>
-#include <libs/string.h>
-#include <memory/allocators.h>
+#include "config.hpp"
+#include "libs/string.hpp"
+#include "memory/allocators.hpp"
 
 #define PTE(addr)       ((addr >> 12) & 0x1ff)
 #define PDE(addr)       ((addr >> 21) & 0x1ff)

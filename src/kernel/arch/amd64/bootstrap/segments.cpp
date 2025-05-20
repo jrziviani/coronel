@@ -1,7 +1,7 @@
-#include "segments.h"
+#include "segments.hpp"
 
-#include <arch/amd64/instructions.h>
-#include <libs/logger.h>
+#include "arch/amd64/instructions.hpp"
+#include "libs/logger.hpp"
 
 
 /*

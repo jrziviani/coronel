@@ -1,8 +1,8 @@
-#ifndef PROTECTED_MODE_H
-#define PROTECTED_MODE_H
+#ifndef PROTECTED_MODE_HPP
+#define PROTECTED_MODE_HPP
 
-#include <libs/stdint.h>
-#include <arch/iarch.h>
+#include "libs/stdint.hpp"
+#include "arch/iarch.hpp"
 
 class protected_mode : public iprotected_mode
 {
@@ -21,4 +21,4 @@ public:
     void printx(uint64_t x);
 };
 
-#endif // PROTECTED_MODE_H
+#endif // PROTECTED_MODE_HPP

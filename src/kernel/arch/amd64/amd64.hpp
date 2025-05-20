@@ -1,13 +1,12 @@
-#ifndef AMD64_H
-#define AMD64_H
+#ifndef AMD64_HPP
+#define AMD64_HPP
 
-#include "arch/iarch.h"
-#include "bootstrap/irq.h"
-#include "instructions.h"
-#include "libs/move.h"
-#include "memory/paging.h"
-#include "memory/pagetable.h"
-#include "video/protected_mode.h"
+#include "arch/iarch.hpp"
+#include "bootstrap/irq.hpp"
+#include "instructions.hpp"
+#include "memory/paging.hpp"
+#include "memory/pagetable.hpp"
+#include "video/protected_mode.hpp"
 
 class amd64 : public iarch
 {
@@ -105,4 +104,4 @@ public:
 #endif
 };
 
-#endif // AMD64_H
+#endif // AMD64_HPP

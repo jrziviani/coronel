@@ -1,8 +1,8 @@
-#ifndef PCI_H
-#define PCI_H
+#ifndef PCI_HPP
+#define PCI_HPP
 
-#include <libs/stdint.h>
-#include <arch/iarch.h>
+#include "libs/stdint.hpp"
+#include "arch/iarch.hpp"
 
 namespace bus
 {
@@ -107,4 +107,4 @@ namespace bus
     }
 }
 
-#endif // PCI_H
+#endif // PCI_HPP

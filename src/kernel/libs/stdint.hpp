@@ -1,5 +1,5 @@
-#ifndef STDINT_H
-#define STDINT_H
+#ifndef STDINT_HPP
+#define STDINT_HPP
 
 using int8_t        = signed char;
 using uint8_t       = unsigned char;
@@ -46,4 +46,4 @@ inline uintptr_t ptr_from(T addr)
     return reinterpret_cast<uintptr_t>(addr);
 }
 
-#endif // STDINT_H
+#endif // STDINT_HPP

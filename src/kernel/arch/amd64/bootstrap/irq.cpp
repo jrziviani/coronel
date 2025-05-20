@@ -1,7 +1,7 @@
-#include "irq.h"
+#include "irq.hpp"
 
-#include <arch/amd64/instructions.h>
-#include <arch/amd64/video/protected_mode.h>
+#include "arch/amd64/instructions.hpp"
+#include "arch/amd64/video/protected_mode.hpp"
 
 const keyboard_handler_t *keyboard_handler_p = nullptr;
 

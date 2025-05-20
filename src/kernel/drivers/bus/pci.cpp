@@ -1,4 +1,4 @@
-#include "pci.h"
+#include "pci.hpp"
 
 constexpr uint8_t MAX_PCI_FUNCTIONS = 8;
 constexpr uint8_t MAX_PCI_SLOTS    = 32;

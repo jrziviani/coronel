@@ -1,9 +1,9 @@
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#ifndef KEYBOARD_HPP
+#define KEYBOARD_HPP
 
 class iarch;
 
-#include "libs/functional.h"
+#include "libs/functional.hpp"
 
 namespace peripherals
 {
@@ -26,4 +26,4 @@ namespace peripherals
 
 using keyboard_handler_t = lib::interrupt_handler_type<peripherals::keyboard>;
 
-#endif // KEYBOARD_H
+#endif // KEYBOARD_HPP

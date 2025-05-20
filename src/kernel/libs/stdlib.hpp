@@ -1,7 +1,7 @@
-#ifndef STDLIB_H
-#define STDLIB_H
+#ifndef STDLIB_HPP
+#define STDLIB_HPP
 
-#include "stdint.h"
+#include "stdint.hpp"
 
 enum base {
     bin = 2,
@@ -52,4 +52,4 @@ static void itoa(char *buffer, size_t size, int64_t value, base b)
     }  
 }
 
-#endif // STDLIB_H
+#endif // STDLIB_HPP

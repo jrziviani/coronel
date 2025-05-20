@@ -1,7 +1,7 @@
-#ifndef REGISTERS_H
-#define REGISTERS_H
+#ifndef REGISTERS_HPP
+#define REGISTERS_HPP
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 struct regs
 {
@@ -85,4 +85,4 @@ struct task_state
     uint16_t iomap_base; // io bitmap offset
 } __attribute__((packed));
 
-#endif // REGISTERS_H
+#endif // REGISTERS_HPP

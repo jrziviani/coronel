@@ -1,7 +1,7 @@
-#ifndef IPROTECTED_MODE_H
-#define IPROTECTED_MODE_H
+#ifndef IPROTECTED_MODE_HPP
+#define IPROTECTED_MODE_HPP
 
-#include <libs/stdint.h>
+#include "libs/stdint.hpp"
 
 constexpr size_t WIDTH = 80;
 constexpr size_t HEIGHT = 25;
@@ -55,4 +55,4 @@ public:
     }
 };
 
-#endif // IPROTECTED_MODE_H
+#endif // IPROTECTED_MODE_HPP
