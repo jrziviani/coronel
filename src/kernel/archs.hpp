@@ -7,10 +7,10 @@
 
 namespace archs
 {
-    const char* get_arch_name()
+    inline const char* get_arch_name()
     {
         #if defined(__x86_64__) || defined(_M_X64)
-            return "x86_64";
+            return "amd64";
         #elif defined(__i386__) || defined(_M_IX86)
             return "x86";
         #elif defined(__aarch64__)
@@ -22,7 +22,7 @@ namespace archs
         #endif
     }
 
-    iarch *get_arch()
+    inline iarch *get_arch()
     {
         #if defined(__x86_64__) || defined(_M_X64)
             auto mem = reinterpret_cast<iarch*>(placement_kalloc(sizeof(iarch)));

@@ -57,6 +57,9 @@ extern "C"
     void irq13();
     void irq14();
     void irq15();
+    
+    // Syscall interrupt handler
+    void syscall_int();
 }
 
 #endif // SEGMENTS_HPP

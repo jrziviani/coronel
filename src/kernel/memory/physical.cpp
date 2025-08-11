@@ -15,11 +15,11 @@ void physical::setup(paddr_t start, size_t len)
 {
     physical_end_  = ptr_to<paddr_t>(ptr_from(start) + len);
     uintptr_t addr = ALIGN_UP(ptr_from(start));
-    len            = ALIGN_DOWN(len);
+    uintptr_t end  = ALIGN_DOWN(ptr_from(start) + len);
 
     // add the whole physical memory in the list of free
     // frames
-    for (; addr < len; addr += FRAME_SIZE) {
+    for (; addr < end; addr += FRAME_SIZE) {
         free(ptr_to<paddr_t>(addr));
     }
 }
@@ -37,7 +37,6 @@ paddr_t physical::alloc()
     //   initial: [ 0x5000 ]->[ 0x6000 ]->[ 0x7000]->NULL
     //   after:   [ 0x5000 ]->[ 0x6000 ]->NULL
     //            return: 0x7000
-    kfree_block(sizeof(frame));
     free_list_ = reserve->previous;
     return reserve->address;
 }
@@ -51,21 +50,35 @@ paddr_t physical::alloc(size_t blocks)
         return nullptr;
     }
 
-    paddr_t addr = alloc();
-    if (addr == nullptr) {
-        lib::log(lib::log_level::CRITICAL, "Unvailable physical address");
+    // Store allocated blocks so we can free them if allocation fails
+    paddr_t *allocated_blocks = reinterpret_cast<paddr_t*>(placement_kalloc(blocks * sizeof(paddr_t)));
+    if (allocated_blocks == nullptr) {
         return nullptr;
     }
 
-    while (--blocks) {
-        if (alloc() == nullptr) {
-            // TODO: at this point we have at least one block allocated, that must be freed.
-            lib::log(lib::log_level::CRITICAL, "Unvailable physical address");
+    // Try to allocate all blocks
+    for (size_t i = 0; i < blocks; i++) {
+        allocated_blocks[i] = alloc();
+        if (allocated_blocks[i] == nullptr) {
+            // Allocation failed, free all previously allocated blocks
+            for (size_t j = 0; j < i; j++) {
+                free(allocated_blocks[j]);
+            }
+
+            // Free the tracking array
+            kfree_block(blocks * sizeof(paddr_t));  // Free the tracking array
+            
+            lib::log(lib::log_level::CRITICAL, "Unable to allocate blocks, partial allocation failed");
             return nullptr;
         }
     }
 
-    return addr;
+    paddr_t first_block = allocated_blocks[0];
+
+    // Free the tracking array
+    kfree_block(blocks * sizeof(paddr_t));
+
+    return first_block;
 }
 
 void physical::free(paddr_t addr)

@@ -95,6 +95,9 @@ namespace lib
     template <class T>
     struct is_same<T, T> : true_type {};
 
+    template <class T, class U>
+    inline constexpr bool is_same_v = is_same<T, U>::value;
+
     template <class>
     struct is_integral : false_type {};
     template <> struct is_integral<int8_t>    : true_type {};
@@ -105,6 +108,18 @@ namespace lib
     template <> struct is_integral<uint16_t>  : true_type {};
     template <> struct is_integral<uint32_t>  : true_type {};
     template <> struct is_integral<uint64_t>  : true_type {};
+
+    template <class T>
+    inline constexpr bool is_integral_v = is_integral<T>::value;
+
+    template<class T>
+    struct is_floating_point : false_type {};
+    template <> struct is_floating_point<float>    : true_type {};
+    template <> struct is_floating_point<double>   : true_type {};
+    template <> struct is_floating_point<long double> : true_type {};
+
+    template <class T>
+    inline constexpr bool is_floating_point_v = is_floating_point<T>::value;
 }
 
 // explanation: https://en.wikibooks.org/wiki/More_C++_Idioms/Member_Detector

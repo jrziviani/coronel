@@ -29,6 +29,16 @@ public:
         keyboard_handler_p = handler;
     }
 
+    void set_timer_handler(const timer_handler_t *handler) override
+    {
+        timer_handler_p = handler;
+    }
+
+    uint8_t read_byte(uint16_t value_port) const override
+    {
+        return insn::inb(value_port);
+    }
+
     uint8_t read_byte(uint32_t addr, uint16_t addr_port, uint16_t value_port) const override
     {
         insn::outl(addr_port, addr);
@@ -50,6 +60,11 @@ public:
     void write_byte(uint32_t addr, uint16_t addr_port, uint16_t value_port, uint8_t value) const override
     {
         insn::outl(addr_port, addr);
+        insn::outb(value_port, value);
+    }
+
+    void write_byte(uint16_t value_port, uint8_t value) const override
+    {
         insn::outb(value_port, value);
     }
 

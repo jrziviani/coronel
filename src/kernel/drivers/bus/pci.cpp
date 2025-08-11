@@ -145,39 +145,23 @@ namespace bus {
                 read_dword(addr, PCI_BAR_4),
                 read_dword(addr, PCI_BAR_5)
             };
-            
-            arch_->get_video()->prints(" > PCI ");
-            arch_->get_video()->printd(info.address.bus);
-            arch_->get_video()->prints(":");
-            arch_->get_video()->printd(info.address.slot);
-            arch_->get_video()->prints(":");
-            arch_->get_video()->printd(info.address.function);
-            arch_->get_video()->prints(" - 0x");
-            arch_->get_video()->printx(info.vendor);
-            arch_->get_video()->prints(" 0x");
-            arch_->get_video()->printx(info.device);
-            arch_->get_video()->prints(" - 0x");
-            arch_->get_video()->printx(info.klass);
-            arch_->get_video()->prints(" 0x");
-            arch_->get_video()->printx(info.subclass);
-            arch_->get_video()->prints("\n");
+
+            arch_->get_video()->print(" > PCI ", info.address.bus, ":", info.address.slot, ":", info.address.function, " - ");
+            arch_->get_video()->printx(info.vendor); arch_->get_video()->prints(" "); 
+            arch_->get_video()->printx(info.device);arch_->get_video()->prints(" "); 
+            arch_->get_video()->printx(info.klass); arch_->get_video()->prints(" "); 
+            arch_->get_video()->printx(info.subclass); arch_->get_video()->prints("\n");
 
             if (info.klass == 0x1 && info.subclass == 0x6) {
-                arch_->get_video()->prints("   ^-- Bars: 0x");
-                arch_->get_video()->printx(info.bars[0]);
-                arch_->get_video()->prints(" 0x");
-                arch_->get_video()->printx(info.bars[1]);
-                arch_->get_video()->prints(" 0x");
-                arch_->get_video()->printx(info.bars[2]);
-                arch_->get_video()->prints(" 0x");
-                arch_->get_video()->printx(info.bars[3]);
-                arch_->get_video()->prints(" 0x");
-                arch_->get_video()->printx(info.bars[4]);
-                arch_->get_video()->prints(" 0x");
-                arch_->get_video()->printx(info.bars[5]);
-                arch_->get_video()->prints("\n");
+                arch_->get_video()->prints("   ^-- Bars: ");
+                arch_->get_video()->printx(info.bars[0]); arch_->get_video()->prints(" "); 
+                arch_->get_video()->printx(info.bars[1]); arch_->get_video()->prints(" "); 
+                arch_->get_video()->printx(info.bars[2]); arch_->get_video()->prints(" "); 
+                arch_->get_video()->printx(info.bars[3]); arch_->get_video()->prints(" "); 
+                 arch_->get_video()->printx(info.bars[4]); arch_->get_video()->prints(" "); 
+                 arch_->get_video()->printx(info.bars[5]); arch_->get_video()->prints("\n");
             }
-        }
+         }
 
         // if the device is a bridge, scan the secondary bus
         if (type == PCI_TYPE_BRIDGE) {

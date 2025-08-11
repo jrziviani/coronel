@@ -80,6 +80,14 @@ paddr_t insn::get_current_page()
     return ptr_to<paddr_t>(cr3);
 }
 
+void insn::set_page_directory(paddr_t page_dir)
+{
+    asm volatile("mov %0, %%cr3"
+                 :
+                 : "r"(ptr_from(page_dir))
+                 : "memory");
+}
+
 void insn::tlb_flush(paddr_t addr)
 {
     asm volatile("invlpg (%0)"
@@ -93,4 +101,9 @@ void insn::lidt(uint64_t idt)
     asm volatile("lidt (%0)"
                  :
                  : "r"(idt));
+}
+
+void insn::io_wait()
+{
+    insn::outb(0x80, 0);
 }

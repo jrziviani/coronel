@@ -80,5 +80,6 @@ void protected_mode::printx(uint64_t x)
 {
     char buffer[32];
     itoa(buffer, 32, x, base::hex);
+    prints("0x");
     prints(buffer);
 }

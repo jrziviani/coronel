@@ -1,6 +1,5 @@
 #include "keyboard.hpp"
 #include "arch/iarch.hpp"
-#include "arch/amd64/instructions.hpp"
 #include "libs/stdint.hpp"
 
 constexpr uint16_t DATA_IN_BUFFER = 0x01;
@@ -126,12 +125,12 @@ peripherals::keyboard::keyboard(iarch *arch) : arch_(arch), shift_(false)
 
 void peripherals::keyboard::on_keyboard(const interrupt_t &)
 {
-    auto status = insn::inb(STATUS_PORT);
+    auto status = arch_->read_byte(STATUS_PORT);
     if ((status & DATA_IN_BUFFER) == 0) {
         return;
     }
 
-    auto data = insn::inb(DATA_PORT);
+    auto data = arch_->read_byte(DATA_PORT);
 
     if (data & 0x80) {
         on_keyup(data);

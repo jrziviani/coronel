@@ -1,5 +1,6 @@
 #include "allocators.hpp"
 #include "config.hpp"
+#include "heap.hpp"
 
 extern uintptr_t _end;
 
@@ -38,4 +39,28 @@ void kfree_block(size_t size)
 uintptr_t current()
 {
     return __placement;
+}
+
+// Basic kernel allocator
+vaddr_t kalloc(size_t size)
+{
+    // Use heap if available, otherwise fall back to placement allocator
+    if (memory::g_kernel_heap != nullptr) {
+        return memory::kmalloc(size);
+    }
+    
+    // Always align allocations
+    return placement_kalloc(size, true);
+}
+
+void kfree(vaddr_t addr)
+{
+    // Use proper heap if available
+    if (memory::g_kernel_heap != nullptr) {
+        memory::kfree(addr);
+        return;
+    }
+    
+    // Placement allocator doesn't support individual frees
+    (void)addr;  // Suppress unused parameter warning
 }

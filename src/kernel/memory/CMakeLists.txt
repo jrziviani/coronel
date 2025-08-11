@@ -1,3 +1,6 @@
 add_library(memory.o OBJECT allocators.cpp
                              physical.cpp
-                             virtual.cpp)
+                             virtual.cpp
+                             heap.cpp
+                             memory_manager.cpp
+                             user_allocator.cpp)

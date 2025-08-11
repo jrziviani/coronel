@@ -12,9 +12,9 @@
  * "virtual memories". Kernel has a virtual memory as well as each process instance
  * in the system. Thus, an virt object can be copied.
  *
- * Instead of a list of free memory, this abstraction has a list of allocated memory,
- * it means that a new node (16-byte) will be created and appended to the list when
- * handling new allocations.
+ * This class maintains a list of FREE memory regions. When allocating, we find
+ * a suitable free region and either split it or remove it entirely. When freeing,
+ * we add the region back and attempt to coalesce adjacent free regions.
  */
 class virt
 {
@@ -36,7 +36,7 @@ class virt
     };
 
 private:
-    lib::ilist<node*> allocated_list_;
+    lib::ilist<node*> free_mem_list_;
 
 public:
     virt();

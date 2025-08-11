@@ -7,7 +7,7 @@
 /*
  * Constants
  */
-const uint8_t LONG_MODE_GDT_GATES     =  5;
+const uint8_t LONG_MODE_GDT_GATES     =  7;
 const uint8_t LONG_MODE_IDT_GATES     = 64;
 
 
@@ -113,6 +113,7 @@ struct gdt_ptr
  */
 void irq_remap();
 void idt_add_gate(idt_entry *entries, uint8_t gate, void (*function_ptr)());
+void idt_add_user_gate(idt_entry *entries, uint8_t gate, void (*function_ptr)());
 
 extern "C"
 {
@@ -131,7 +132,10 @@ void gdt_setup()
     gdt_ptr gdt;
     gdt_code_entry code;
     gdt_data_entry data;
+    gdt_code_entry user_code;
+    gdt_data_entry user_data;
 
+    // Kernel code segment (ring 0)
     code.fields.ign_1        = 0x0;
     code.fields.conforming   = 0x0;
     code.fields.one          = 0x3;
@@ -142,6 +146,7 @@ void gdt_setup()
     code.fields.default_size = 0x0;
     code.fields.ign_3        = 0x0;
 
+    // Kernel data segment (ring 0)
     data.fields.ign_1        = 0x0;
     data.fields.writable     = 0x1;
     data.fields.zero         = 0x0;
@@ -150,11 +155,33 @@ void gdt_setup()
     data.fields.present      = 0x1;
     data.fields.ign_3        = 0x0;
 
+    // User code segment (ring 3)
+    user_code.fields.ign_1        = 0x0;
+    user_code.fields.conforming   = 0x0;
+    user_code.fields.one          = 0x3;
+    user_code.fields.dpl          = 0x3;  // User privilege level
+    user_code.fields.present      = 0x1;
+    user_code.fields.ign_2        = 0x0;
+    user_code.fields.long_mode    = 0x1;
+    user_code.fields.default_size = 0x0;
+    user_code.fields.ign_3        = 0x0;
+
+    // User data segment (ring 3)
+    user_data.fields.ign_1        = 0x0;
+    user_data.fields.writable     = 0x1;
+    user_data.fields.zero         = 0x0;
+    user_data.fields.one          = 0x1;
+    user_data.fields.ign_2        = 0x0;
+    user_data.fields.present      = 0x1;
+    user_data.fields.ign_3        = 0x0;
+
     g_entries[0].entry = 0;
-    g_entries[1].entry = code.ulong;
-    g_entries[2].entry = data.ulong;
-    g_entries[3].entry = 0; // TSS
-    g_entries[4].entry = 0; // TSS
+    g_entries[1].entry = code.ulong;      // Kernel code (0x08)
+    g_entries[2].entry = data.ulong;      // Kernel data (0x10)
+    g_entries[3].entry = user_code.ulong; // User code (0x18 | 3 = 0x1B)
+    g_entries[4].entry = user_data.ulong; // User data (0x20 | 3 = 0x23)
+    g_entries[5].entry = 0; // TSS low
+    g_entries[6].entry = 0; // TSS high
 
     gdt.limit = sizeof(g_entries[0]) * LONG_MODE_GDT_GATES - 1;
     gdt.base = reinterpret_cast<uint64_t>(&g_entries);
@@ -165,8 +192,8 @@ void gdt_setup()
 void tss_set_gate(paddr_t addr)
 {
     gdt_tss_entry tss;
-    tss.ulong[0] = g_entries[3].entry;
-    tss.ulong[1] = g_entries[4].entry;
+    tss.ulong[0] = g_entries[5].entry;
+    tss.ulong[1] = g_entries[6].entry;
 
     //uint16_t limit    = sizeof(g_entries[0]) * LONG_MODE_GDT_GATES - 1;
     uintptr_t address = ptr_from(addr);
@@ -183,8 +210,8 @@ void tss_set_gate(paddr_t addr)
     tss.fields_lo.type         = 0x9; // 0b1001 - see above
     tss.fields_hi.zero         = 0x0;
 
-    g_entries[3].entry = tss.ulong[0];
-    g_entries[4].entry = tss.ulong[1];
+    g_entries[5].entry = tss.ulong[0];
+    g_entries[6].entry = tss.ulong[1];
 }
 
 void idt_setup()
@@ -196,6 +223,8 @@ void idt_setup()
     idt_ptr.limit = (sizeof(idt_entry) * LONG_MODE_IDT_GATES) - 1;
     idt_ptr.base = reinterpret_cast<uint64_t>(i_entries);
     insn::lidt(reinterpret_cast<uintptr_t>(&idt_ptr));
+
+    insn::cli();
 
     idt_add_gate(i_entries, 0, &div);
     idt_add_gate(i_entries, 1, &dbg);
@@ -230,7 +259,6 @@ void idt_setup()
     idt_add_gate(i_entries, 29, &rsA);
     idt_add_gate(i_entries, 30, &rsB);
     idt_add_gate(i_entries, 31, &rsC);
-
     lib::log(lib::log_level::TRACE, "Set all exception handlers");
 
     irq_remap();
@@ -254,6 +282,10 @@ void idt_setup()
     idt_add_gate(i_entries, 47, &irq15);
     lib::log(lib::log_level::TRACE, "Set all IRQs");
 
+    // Add syscall interrupt (0x80) - user accessible
+    idt_add_user_gate(i_entries, 0x80, &syscall_int);
+    lib::log(lib::log_level::TRACE, "Set syscall interrupt (0x80)");
+
     insn::sti();
 }
 
@@ -272,12 +304,25 @@ void idt_add_gate(idt_entry *entries, uint8_t gate, void (*function_ptr)())
     entries[gate].reserved_ign_2 = 0;
 }
 
+void idt_add_user_gate(idt_entry *entries, uint8_t gate, void (*function_ptr)())
+{
+    uintptr_t function = reinterpret_cast<uintptr_t>(function_ptr);
+    entries[gate].offset_lo = function & 0xffff;
+    entries[gate].selector = 0x8;
+    entries[gate].ist = 0;
+    entries[gate].reserved_ign_1 = 0;
+    entries[gate].type = 0xe;
+    entries[gate].zero = 0;
+    entries[gate].dpl = 3;  // User privilege level - allows ring 3 to call
+    entries[gate].present = 1;
+    entries[gate].offset_hi = (function >> 16) & 0xffffffffffff;
+    entries[gate].reserved_ign_2 = 0;
+}
+
 void irq_remap()
 {
     // https://en.wikibooks.org/wiki/X86_Assembly/Programmable_Interrupt_Controller
     // https://wiki.osdev.org/8259_PIC
-    //
-    // NOTE: Not sure if it's still required for modern APIC chips
     //
     // this function will remaps the interrupt numbers these IRQs sends to
     // CPU to avoid conflicts between HW and SW interrupts, because low 32
@@ -308,30 +353,33 @@ void irq_remap()
     const int ICW1_INIT = 0x11; // INIT, cascade mode, ICW4 required
     const int ICW4_8086 = 0x01;
 
-    // save masks
-    auto a1 = insn::inb(PIC1_DATA);
-    auto a2 = insn::inb(PIC2_DATA);
-
     // ICW1: to PIC1 and PIC2. In the initialization mode, 8259A will
     // wait for 3 ICWs
     insn::outb(PIC1_COMM, ICW1_INIT);
+    insn::io_wait();
     insn::outb(PIC2_COMM, ICW1_INIT);
+    insn::io_wait();
 
     // ICW2: to PIC1 and PIC2, setting the vector offset for each.
     // PIC1 -> 0x20 and PIC2 -> 0x28.
     insn::outb(PIC1_DATA, OFFSET_PIC1);
+    insn::io_wait();
     insn::outb(PIC2_DATA, OFFSET_PIC2);
+    insn::io_wait();
     //
     // ICW3: Tell master (PIC1) there's slave PIC at IRQ2 (starts 0)
     //       Tell slave (PIC2) its cascade identity number (2 here)
     insn::outb(PIC1_DATA, 0x04);
+    insn::io_wait();
     insn::outb(PIC2_DATA, 0x02);
+    insn::io_wait();
 
     // ICW4: set 8086 mode
     insn::outb(PIC1_DATA, ICW4_8086);
+    insn::io_wait();
     insn::outb(PIC2_DATA, ICW4_8086);
+    insn::io_wait();
 
-    // restore saved masks
-    insn::outb(PIC1_DATA, a1);
-    insn::outb(PIC2_DATA, a2);
+    insn::outb(PIC1_DATA, 0);
+    insn::outb(PIC2_DATA, 0);
 }

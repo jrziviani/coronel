@@ -2,6 +2,7 @@
 #define IPROTECTED_MODE_HPP
 
 #include "libs/stdint.hpp"
+#include "libs/type_traits.hpp"
 
 constexpr size_t WIDTH = 80;
 constexpr size_t HEIGHT = 25;
@@ -28,6 +29,41 @@ public:
     virtual void prints(const char *s) = 0;
     virtual void printd(int d) = 0;
     virtual void printx(uint64_t x) = 0;
+
+    
+    template <typename T, typename... Args>
+    inline void print(T value, Args... args)
+    {
+        print(value);
+        if constexpr (sizeof...(args) > 0) {
+            print(args...);
+        }
+    }
+
+    template <typename T>
+    inline void print(T value)
+    {
+        if constexpr (lib::is_same_v<T, const char*>)
+        {
+            prints(value);
+        }
+        else if constexpr (lib::is_same_v<T, char>)
+        {
+            printc(value);
+        }
+        else if constexpr (lib::is_integral_v<T>)
+        {
+            printd(value);
+        }
+        else if constexpr (lib::is_floating_point_v<T>)
+        {
+            printx(static_cast<uint64_t>(value));
+        }
+        else {
+            prints("Err: ");
+            prints(value);
+        }
+    }
 
     void set_color(colors color = colors::GRAY)
     {

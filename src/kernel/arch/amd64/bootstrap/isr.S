@@ -23,7 +23,7 @@
     FN_HEADER(irq##num)     \
     cli;                    \
     push $0x0;              \
-    push $num;              \
+    push $num + 0x20;       \
     jmp irq_handler
 
 #define ISR_ADDR(name) &name
